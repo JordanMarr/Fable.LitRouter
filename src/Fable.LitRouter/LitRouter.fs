@@ -1,5 +1,5 @@
 ﻿/// This module has been copied from Feliz.Router and ported to work with Fable.Lit.
-module Router
+module LitRouter
 
 open Browser.Dom
 open Browser.Types
