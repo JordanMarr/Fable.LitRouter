@@ -3,14 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
 	<Version>1.0.0</Version>
-	<PackageVersion>1.0.0-beta-003</PackageVersion>
+	<PackageVersion>1.0.0-beta-004</PackageVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="*.fsproj; *.fs;" PackagePath="fable\" />
-    <Content Remove="Fable.LitRouter.fsproj" />
     <Content Include="LitRouter.fs" />
   </ItemGroup>
 
@@ -21,6 +19,12 @@
 
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="6.0.0" />
+  </ItemGroup>	
+
+  <!-- Add source files to "fable" folder in Nuget package -->
+  <ItemGroup>
+    <Content Include="*.fsproj; *.fs" PackagePath="fable\" />
   </ItemGroup>
+
 
 </Project>
