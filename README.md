@@ -1,5 +1,5 @@
-# Fable.LitRouter ![NuGet version (Fable.LitRouter)](https://img.shields.io/nuget/v/Fable.LitRouter.svg?style=flat-square)
-
+# Fable.LitRouter [![NuGet version (Fable.LitRouter)](https://img.shields.io/nuget/v/Fable.LitRouter.svg?style=flat-square)](https://www.nuget.org/packages/Fable.LitRouter/)
+                  
 [Feliz.Router](https://github.com/Zaid-Ajaj/Feliz.Router) copied and ported to [Fable.Lit](https://github.com/fable-compiler/Fable.Lit).
 
 # Usage
