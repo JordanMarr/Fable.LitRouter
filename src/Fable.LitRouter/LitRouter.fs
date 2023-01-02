@@ -101,15 +101,17 @@ module Router =
         | [ single ] -> Some([], single)
         | list -> Some (list |> List.tail |> List.rev, list.Head)
 
+    let dispatchCustomNavigationEvent () =
+        let ev = document.createEvent("CustomEvent")
+        ev.initEvent (customNavigationEvent, true, true)
+        window.dispatchEvent ev |> ignore
+
     let nav xs (mode: HistoryMode) (routeMode: RouteMode) =
         if mode = HistoryMode.PushState
         then history.pushState ((), "", encodeParts xs routeMode)
         else history.replaceState((), "", encodeParts xs routeMode)
-
-        let ev = document.createEvent("CustomEvent")
-
-        ev.initEvent (customNavigationEvent, true, true)
-        window.dispatchEvent ev |> ignore
+        
+        dispatchCustomNavigationEvent ()
 
     /// Parses the URL into multiple path segments
     let urlSegments (path: string) (mode: RouteMode) =
@@ -153,23 +155,24 @@ module Router =
         |> fun path -> urlSegments path routeMode
         |> urlChanged
 
-    let router (input: RouterProps) = 
-        let onChange (e: Event) = 
-            let urlChanged = Option.defaultValue ignore input.onUrlChanged
-            let routeMode = Option.defaultValue RouteMode.Hash input.hashMode
-            onUrlChange routeMode urlChanged e
+    //let router (input: RouterProps) = 
+    //    let onChange (e: Event) = 
+    //        let urlChanged = Option.defaultValue ignore input.onUrlChanged
+    //        let routeMode = Option.defaultValue RouteMode.Hash input.hashMode
+    //        onUrlChange routeMode urlChanged e
 
-        if navigatorUserAgent.Contains "Trident" || navigatorUserAgent.Contains "MSIE" 
-        then window.onhashchange <- onChange
-        else window.onpopstate <- onChange
+    //    if navigatorUserAgent.Contains "Trident" || navigatorUserAgent.Contains "MSIE" 
+    //    then window.onhashchange <- onChange
+    //    else window.onpopstate <- onChange
 
-        window.onload <- fun e -> 
-            onChange e
-            window.addEventListener(customNavigationEvent, onChange)
+    //    window.onload <- fun e -> 
+    //        printfn "window.onload"
+    //        onChange e
+    //        window.addEventListener(customNavigationEvent, onChange)
 
-        match input.application with
-        | Some elem -> elem
-        | None -> Lit.nothing
+    //    match input.application with
+    //    | Some elem -> elem
+    //    | None -> Lit.nothing
 
 /// Defines a property for the `router` element
 type IRouterProperty = interface end
@@ -1472,7 +1475,12 @@ module LitExtension =
                 if Router.navigatorUserAgent.Contains "Trident" || Router.navigatorUserAgent.Contains "MSIE" 
                 then window.onhashchange <- onChange
                 else window.onpopstate <- onChange
+
                 window.addEventListener(Router.customNavigationEvent, onChange)
+                
+                // Ensure route is applied on page load
+                Router.dispatchCustomNavigationEvent ()
+                
                 Hook.createDisposable(fun () -> 
                     window.removeEventListener(Router.customNavigationEvent, onChange)
                 )
