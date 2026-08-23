@@ -26,8 +26,12 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: Build
+        # Explicit build required: GeneratePackageOnBuild=true makes `dotnet pack` skip building (NU5026)
+        run: dotnet build src/Fable.LitRouter/Fable.LitRouter.fsproj -c Release
+
       - name: Pack
-        run: dotnet pack src/Fable.LitRouter/Fable.LitRouter.fsproj -c Release -o nupkg
+        run: dotnet pack src/Fable.LitRouter/Fable.LitRouter.fsproj -c Release --no-build -o nupkg
 
       - name: NuGet login (OIDC -> temp API key)
         uses: NuGet/login@v1
